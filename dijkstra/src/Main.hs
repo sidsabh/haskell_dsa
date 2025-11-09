@@ -31,13 +31,11 @@ process (AdjMatrix graph) =
                 q' = filter (\i -> getV i /= u) q
                 neighbors = graph !! (u-1)
                 enum_neighbors = zip [1..length neighbors] neighbors
-                d' = update enum_neighbors where
-                        update en = case en of
-                            [] -> []
-                            (i, W weight):xs ->
+                d' = fmap update enum_neighbors where
+                        update (i, W weight) =
                                 let alt = my_dist + weight
                                     new = min alt (d !! (i-1))
-                                in new : update xs
+                                in new
                 e = E d' q'
             put e) :: State Env ()
         doAlgo = whileM not_empty loop
