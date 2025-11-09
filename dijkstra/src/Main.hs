@@ -1,3 +1,4 @@
+{-# LANGUAGE InstanceSigs #-}
 module Main (main) where
 
 import System.Random
@@ -46,12 +47,15 @@ process (AdjMatrix graph) =
     in doAlgo >> get_answer
 
 
-
-
 dijkstra :: Graph -> Vertex -> [Int]
 dijkstra g@(AdjMatrix graph) (V start) =
     let numNodes = length graph
-        d = [if x /= start then 1/0 else 0 | x <- [1..numNodes]]
+        d = do 
+            x <- [1..numNodes]
+            if x /= start then 
+                return (1/0 )
+            else 
+                return 0
         q = [V x | x <- [1..numNodes]]
         initEnv = E d q
     in evalState (process g) initEnv
